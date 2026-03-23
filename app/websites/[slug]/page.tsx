@@ -20,6 +20,19 @@ type WebsitePageType = {
   }>;
 };
 
+export async function generateMetadata({ params }: WebsitePageType) {
+  const { slug } = await params;
+  const client = createClient();
+  const website = await client.getByUID("website", slug);
+  return {
+    title: website.data.title,
+    description: website.data.meta_description,
+    openGraph: {
+      images: [website.data.meta_image],
+    },
+  };
+}
+
 export default async function WebsitePage({ params }: WebsitePageType) {
   const { slug } = await params;
   const client = createClient();
